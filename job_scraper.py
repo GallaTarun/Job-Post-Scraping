@@ -10,10 +10,17 @@ URL = 'https://www.naukri.com/allcompanies?searchType=premiumLogo&title=Featured
 driver = webdriver.Chrome()
 
 def get_jobs_list(job_page_url):
+    '''
+    Function to parse one Job posting page of a company.
+    
+    Parameters:
+    job_page_url (String): Web page URL for One page 
+    
+    Returns: None (Inserts extracted job post data into global variable JOBS_INFO)
+    '''
     driver.get(job_page_url)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-    # <article> .jobtuple -> for entire job post
     job_posts_div = soup.find("div", attrs={"class": "parentContainer"})
 
     if job_posts_div:
@@ -65,6 +72,9 @@ def get_jobs_list(job_page_url):
             JOBS_INFO.append([company_title, job_title, job_description, url, req_experience, salary, location])
 
 def parse_company_jobs_page(company_url):
+    '''
+    Function to get number of pages, in which jobs are posted by a particular company
+    '''
     driver.get(company_url)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     pagination_div = soup.find('div', attrs={'class': 'paginationDesc'})
@@ -76,17 +86,14 @@ def parse_company_jobs_page(company_url):
             get_jobs_list(company_url + '&pageNo=' + str(page))
 
 def list_companies(soup):
+    '''
+    Function to extract the list of companies in the website
+    '''
     companies_container = soup.find("div", {'class': 'standardTupleContainer'})
     companies_div = companies_container.find_all("div", {"class": "tuple"})
     for company_div in companies_div:
         a_tag = company_div.find("a", {"class": 'cta'})
         parse_company_jobs_page(a_tag['href'])
-
-# def write_to_csv(path):
-    # with open(path, 'a') as f:
-    #     for info in JOBS_INFO:
-    #         f.write(", ".join(info)+"\n")
-    # f.close()
 
 def write_to_excel(path):
     df = pd.DataFrame(data= JOBS_INFO, columns=['Company', "Job Title", "Job Description", "Job URL", "Required Experience", "Salary", "Location"])
@@ -96,7 +103,6 @@ def main():
     driver.get(URL)
     soup = BeautifulSoup(driver.page_source, 'html.parser')   
     list_companies(soup=soup)
-
     write_to_excel('jobs_list.xlsx')
 
 main()
