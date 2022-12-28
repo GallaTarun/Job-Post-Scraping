@@ -5,8 +5,19 @@ Python script that scrapes Job posting data from a website.
 
 ## Modules Used
 * Pandas
-* BeautifulSoup
+* bs4
 * Selenium WebDriver
+* openpyxl
 
 ## Installing the modules
+* Installing Pandas 
 ```pip install pandas```
+
+* Installing BeautifulSoup 
+```pip install bs4```
+
+* Installing selenium 
+```pip install selenium```
+
+* Installing openpyxl 
+```pip install openpyxl```
