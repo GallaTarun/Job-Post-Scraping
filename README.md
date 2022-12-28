@@ -7,3 +7,6 @@ Python script that scrapes Job posting data from a website.
 * Pandas
 * BeautifulSoup
 * Selenium WebDriver
+
+## Installing the modules
+```pip install pandas```
